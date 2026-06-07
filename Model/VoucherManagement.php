@@ -5,18 +5,36 @@ declare(strict_types=1);
 namespace SMG\VoucherPayment\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use SMG\VoucherPayment\Api\VoucherManagementInterface;
 use SMG\VoucherPayment\Api\VoucherRepositoryInterface;
 use SMG\VoucherPayment\Api\Data\VoucherInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use SMG\VoucherPayment\Model\VoucherFactory;
+use Magento\Framework\App\ResourceConnection;
+use SMG\VoucherPayment\Model\ResourceModel\Voucher as VoucherResource;
+use SMG\VoucherPayment\Model\VoucherCodeGenerator;
 
+/**
+ * Service responsible for voucher management operations.
+ *
+ */
 class VoucherManagement implements VoucherManagementInterface
 {
     /**
+     * Voucher management service.
+     *
      * @param VoucherRepositoryInterface $voucherRepository
+     * @param VoucherFactory $voucherFactory
+     * @param ResourceConnection $resourceConnection
+     * @param VoucherResource $voucherResource
+     * @param VoucherCodeGenerator $voucherCodeGenerator
      */
     public function __construct(
-        private readonly VoucherRepositoryInterface $voucherRepository
+        private readonly VoucherRepositoryInterface $voucherRepository,
+        private readonly VoucherFactory $voucherFactory,
+        private readonly ResourceConnection $resourceConnection,
+        private readonly VoucherResource $voucherResource,
+        private readonly VoucherCodeGenerator $voucherCodeGenerator
     ) {
     }
 
@@ -135,5 +153,87 @@ class VoucherManagement implements VoucherManagementInterface
         $this->voucherRepository->save($voucher);
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generate(
+        VoucherInterface $request
+    ): VoucherInterface {
+        $voucherCode = $this->voucherCodeGenerator->generate();
+        $voucher = $this->voucherFactory->create();
+        $voucher->setData($request->getData());
+        $voucher->setVoucherNumber($voucherCode);
+
+        return $this->voucherRepository->save($voucher);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function bulkGenerate(
+        VoucherInterface $request,
+        int $limit
+    ): array {
+
+        if (empty($request) || $limit === 0) {
+            return [];
+        }
+        $rows = [];
+        $voucherNumbers = [];
+
+        for ($i = 0; $i < $limit; $i++) {
+            $voucherNumber = $this->voucherCodeGenerator->generate();
+            $rows[] = [
+                VoucherInterface::VOUCHER_NUMBER    => $voucherNumber,
+                VoucherInterface::IS_ACTIVE         => $request->getIsActive(),
+                VoucherInterface::IS_SINGLE_USE     => $request->getIsSingleUse(),
+                VoucherInterface::USAGE_LIMIT       => $request->getUsageLimit(),
+                VoucherInterface::VALID_FROM        => $request->getValidFrom(),
+                VoucherInterface::VALID_TO          => $request->getValidTo()
+            ];
+            $voucherNumbers[] = $voucherNumber;
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->voucherResource->getMainTable();
+        $connection->insertMultiple(
+            $tableName,
+            $rows
+        );
+        return $voucherNumbers;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function bulkDelete(
+        array $vouchers
+    ): int {
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->voucherResource->getMainTable();
+        return $connection->delete(
+            $tableName,
+            ['voucher_number IN (?)' => $vouchers]
+        );
+    }
+    /**
+     * @inheritdoc
+     */
+    public function bulkUpdate(
+        array $vouchers,
+        bool $isActive
+    ): int {
+
+        if (empty($vouchers)) {
+            return 0;
+        }
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->voucherResource->getMainTable();
+        return $connection->update(
+            $tableName,
+            ['is_active' => $isActive],
+            ['voucher_number IN (?)' => $vouchers]
+        );
     }
 }

@@ -41,4 +41,46 @@ interface VoucherManagementInterface
         string $voucherNumber,
         int $orderId
     ): bool;
+
+    /**
+     * Generate a single voucher.
+     *
+     * @param VoucherInterface $request
+     * @return VoucherInterface
+     */
+    public function generate(
+        VoucherInterface $request
+    ): VoucherInterface;
+
+    /**
+     * Generate multiple vouchers.
+     *
+     * @param VoucherInterface $request
+     * @param int $limit
+     * @return string[]
+     */
+    public function bulkGenerate(
+        VoucherInterface $request,
+        int $limit
+    ): array;
+
+    /**
+     * Delete vouchers.
+     *
+     * @param string[] $vouchers
+     * @return int
+     */
+    public function bulkDelete(array $vouchers);
+
+    /**
+     * Update status.
+     *
+     * @param string[] $vouchers
+     * @param bool $isActive
+     * @return int
+     */
+    public function bulkUpdate(
+        array $vouchers,
+        bool $isActive
+    );
 }

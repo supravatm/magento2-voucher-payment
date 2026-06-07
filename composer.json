@@ -30,12 +30,6 @@
         "tutorial",
         "ecommerce"
     ],
-    "homepage": "https://github.com/smg/module-voucher-payment",
-    "support": {
-        "issues": "https://github.com/smg/module-voucher-payment/issues",
-        "source": "https://github.com/smg/module-voucher-payment",
-        "docs": "https://github.com/smg/module-voucher-payment/wiki"
-    },
     "authors": [
         {
             "name": "SMG Development Team",

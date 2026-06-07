@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
   <argument name="data" xsi:type="array">
       <item name="js_config" xsi:type="array">
           <item name="provider" xsi:type="string">voucher_listing.voucher_listing_data_source</item>
@@ -19,19 +20,21 @@
   <!-- DATA SOURCE -->
   <dataSource name="voucher_listing_data_source">
       <argument name="dataProvider" xsi:type="configurableObject">
-          <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-          <argument name="name" xsi:type="string">voucher_listing_data_source</argument>
-          <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
-          <argument name="requestFieldName" xsi:type="string">entity_id</argument>
-          <argument name="data" xsi:type="array">
-              <item name="config" xsi:type="array">
-                  <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                  <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                  <item name="storageConfig" xsi:type="array">
-                      <item name="indexField" xsi:type="string">entity_id</item>
-                  </item>
-              </item>
-          </argument>
+        <argument name="class" xsi:type="string">
+                Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
+        </argument>
+        <argument name="name" xsi:type="string">voucher_listing_data_source</argument>
+        <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+        <argument name="requestFieldName" xsi:type="string">entity_id</argument>
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                <item name="storageConfig" xsi:type="array">
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                </item>
+            </item>
+        </argument>
       </argument>
       <argument name="data" xsi:type="array">
           <item name="js_config" xsi:type="array">
@@ -65,7 +68,9 @@
                         <item name="url" xsi:type="url" path="voucher_payment/index/massDelete"/>
                         <item name="confirm" xsi:type="array">
                             <item name="title" xsi:type="string" translate="true">Delete</item>
-                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected?</item>
+                            <item name="message" xsi:type="string" translate="true">
+                                Are you sure you wan't to delete selected?
+                            </item>
                         </item>
                     </item>
                 </argument>
@@ -105,7 +110,9 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="editorConfig" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">voucher_listing.voucher_listing.columns_spinner_voucher.ids</item>
+                    <item name="selectProvider" xsi:type="string">
+                        voucher_listing.voucher_listing.columns_spinner_voucher.ids
+                    </item>
                     <item name="enabled" xsi:type="boolean">true</item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
@@ -200,7 +207,7 @@
                             <item name="required-entry" xsi:type="boolean">true</item>
                         </item>
                     </item>
-                    <item name="label" xsi:type="string" translate="true">Maximum Usage	</item>
+                    <item name="label" xsi:type="string" translate="true">Maximum Usage    </item>
                 </item>
             </argument>
         </column>

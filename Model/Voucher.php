@@ -104,4 +104,18 @@ class Voucher extends AbstractModel implements VoucherInterface
     {
         return $this->setData(self::TIMES_USED, $used);
     }
+    /**
+     * @inheritdoc
+     */
+    public function getIsSingleUse(): int
+    {
+        return (int)$this->getData(self::IS_SINGLE_USE);
+    }
+    /**
+     * @inheritdoc
+     */
+    public function setIsSingleUse(int $isSingleUse)
+    {
+        return $this->setData(self::IS_SINGLE_USE, $isSingleUse);
+    }
 }

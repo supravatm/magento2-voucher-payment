@@ -16,6 +16,7 @@ interface VoucherInterface
     public const VALID_TO = 'valid_to';
     public const USAGE_LIMIT = 'usage_limit';
     public const TIMES_USED = 'times_used';
+    public const IS_SINGLE_USE = 'is_single_use';
 
     /**
      * Get entity ID.
@@ -121,4 +122,19 @@ interface VoucherInterface
      * @return $this
      */
     public function setTimesUsed(int $used);
+
+    /**
+     * Get single use used.
+     *
+     * @return int
+     */
+    public function getIsSingleUse(): int;
+
+    /**
+     * Set single use used.
+     *
+     * @param int $used
+     * @return $this
+     */
+    public function setIsSingleUse(int $used);
 }
